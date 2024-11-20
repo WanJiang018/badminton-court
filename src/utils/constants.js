@@ -24,6 +24,10 @@ export const PLAYER_ACTION = {
   SWITCH_ACTIVE: "switch-active",
   SWITCH_LEAVE: "switch-leave",
   DELETE: "delete",
+  SELECTED: "selected",
+  CANCEL_SELECTED: "cancel-selected",
+  FINISH: "finish",
+  GAME: "game",
 };
 
 export const LEVEL_DEF = {

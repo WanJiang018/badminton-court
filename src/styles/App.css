@@ -297,6 +297,26 @@ body {
   background: #bda1de;
 }
 
+.text-beginner {
+  color: #b1ffb1;
+}
+.text-novice {
+  color: #ffcad4;
+}
+.text-low-intermediate,
+.text-intermediate {
+  color: #ffe9a5;
+}
+.text-upper-intermediate {
+  color: #a4d5ff;
+}
+.text-advanced {
+  color: #f4f8fb;
+}
+.text-professional {
+  color: #434647;
+}
+
 /* table */
 .table-main {
   --bs-table-color: #333;
@@ -353,4 +373,19 @@ select {
 
 .svg-icon-white {
   filter: brightness(0) invert(1);
+}
+@keyframes float {
+  0% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+  100% {
+    transform: translateY(0);
+  }
+}
+
+.float {
+  animation: float 2s ease-in-out infinite;
 }

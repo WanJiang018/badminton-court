@@ -1,6 +1,10 @@
 import React, { useState, useEffect } from "react";
 import Court from "../components/Court";
-import { DEFAULT_COURT, PLAYER_STATUS } from "../utils/constants";
+import {
+  DEFAULT_COURT,
+  PLAYER_STATUS,
+  PLAYER_ACTION,
+} from "../utils/constants";
 import { storeCourtsData, storePlayersData } from "../utils/functions";
 
 export default function Arrange() {
@@ -34,7 +38,7 @@ export default function Arrange() {
       const result = p.map((item) => {
         let result = { ...item };
 
-        if (item.court === court && status === PLAYER_STATUS["SELECTED"]) {
+        if (item.court === court && status === PLAYER_ACTION["SELECTED"]) {
           result = {
             ...item,
             status: PLAYER_STATUS["REST"],
@@ -43,15 +47,23 @@ export default function Arrange() {
           };
         }
         if (playerIds.includes(item.id)) {
-          if (status === PLAYER_STATUS["GAME"]) {
+          if (status === PLAYER_ACTION["GAME"]) {
             result = {
               ...item,
               status: PLAYER_STATUS["GAME"],
-              count: item.count + 1,
               time: new Date().getTime(),
               court,
             };
-          } else if (status === PLAYER_STATUS["REST"]) {
+          } else if (status === PLAYER_ACTION["FINISH"]) {
+            result = {
+              ...item,
+              status: PLAYER_STATUS["REST"],
+              time: new Date().getTime(),
+              count: item.count + 1,
+              court: undefined,
+              playNo: undefined,
+            };
+          } else if (status === PLAYER_ACTION["CANCEL_SELECTED"]) {
             result = {
               ...item,
               status: PLAYER_STATUS["REST"],
@@ -59,7 +71,7 @@ export default function Arrange() {
               court: undefined,
               playNo: undefined,
             };
-          } else if (status === PLAYER_STATUS["SELECTED"]) {
+          } else if (status === PLAYER_ACTION["SELECTED"]) {
             result = {
               ...item,
               status: PLAYER_STATUS["SELECTED"],

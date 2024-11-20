@@ -402,10 +402,10 @@ function PlayerRow({ data, onUpdatePlayer, onSaveEdit }) {
                 </div>
               )}
               {status === PLAYER_STATUS["REST"] && (
-                <>
+                <div className="d-flex align-items-center gap-1">
                   <img src={CouchIcon} alt="rest" width="12" height="12" />
                   場下休息
-                </>
+                </div>
               )}
               {status === PLAYER_STATUS["TEMP_LEAVE"] && (
                 <div className="d-flex align-items-center gap-1">

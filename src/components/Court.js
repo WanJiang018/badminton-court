@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { PLAYER_STATUS, SPECIAL_NAME } from "../utils/constants";
+import { PLAYER_STATUS, SPECIAL_NAME, PLAYER_ACTION } from "../utils/constants";
 import {
   convertLevelItem,
   formatTimeDifference,
@@ -11,6 +11,8 @@ import ResetIcon from "../images/icon-reset.png";
 import ConfirmIcon from "../images/icon-confirm.png";
 import CancelIcon from "../images/icon-cancel.png";
 import ScoreIcon from "../images/icon-21.png";
+import NextIcon from "../images/icon-next.svg";
+import PauseIcon from "../images/icon-pause.svg";
 
 export default function Court({
   players,
@@ -98,7 +100,7 @@ export default function Court({
     setCourtPlayers(selectedPlayers);
     onUpdatePlayer(
       number,
-      PLAYER_STATUS["SELECTED"],
+      PLAYER_ACTION["SELECTED"],
       selectedPlayers.map((item) => item.id)
     );
   };
@@ -106,7 +108,7 @@ export default function Court({
   const handleFinished = () => {
     clearInterval(intervalRef?.current);
     setCourtPlayers([]);
-    onUpdatePlayer(number, PLAYER_STATUS["REST"], [
+    onUpdatePlayer(number, PLAYER_ACTION["FINISH"], [
       courtPlayers[0].id,
       courtPlayers[1].id,
       courtPlayers[2].id,
@@ -114,17 +116,21 @@ export default function Court({
     ]);
   };
 
+  const handleResetTimer = () => {};
+
+  const handlePause = () => {};
+
   const handleConfirm = () => {
     onUpdatePlayer(
       number,
-      PLAYER_STATUS["GAME"],
+      PLAYER_ACTION["GAME"],
       courtPlayers.map((item) => item.id)
     );
   };
 
   const handleCancelRandom = () => {
     setCourtPlayers([]);
-    onUpdatePlayer(number, PLAYER_STATUS["REST"], [
+    onUpdatePlayer(number, PLAYER_ACTION["CANCEL_SELECTED"], [
       courtPlayers[0].id,
       courtPlayers[1].id,
       courtPlayers[2].id,
@@ -276,11 +282,43 @@ export default function Court({
       {!virtual && (
         <>
           {courtPlayers?.length > 0 ? (
-            <div className="mt-3 d-flex justify-content-center gap-3">
+            <div className="mt-3 d-flex justify-content-center gap-2">
               {courtPlayers?.every(
                 (item) => item.status === PLAYER_STATUS["GAME"]
               ) ? (
                 <>
+                  <button
+                    onClick={handleResetTimer}
+                    className="btn btn-court-outline rounded-pill"
+                    disabled
+                  >
+                    <div className="d-flex align-items-center gap-1">
+                      <img
+                        src={ResetIcon}
+                        alt="score"
+                        width="20"
+                        height="20"
+                        className="svg-icon-white"
+                      />
+                      <div>重新</div>
+                    </div>
+                  </button>
+                  <button
+                    onClick={handlePause}
+                    className="btn btn-court-outline rounded-pill"
+                    disabled
+                  >
+                    <div className="d-flex align-items-center gap-1">
+                      <img
+                        src={PauseIcon}
+                        alt="score"
+                        width="20"
+                        height="20"
+                        className="svg-icon-white"
+                      />
+                      <div>暫停</div>
+                    </div>
+                  </button>
                   <button
                     onClick={handleFinished}
                     className="btn btn-court-outline rounded-pill"
@@ -293,7 +331,7 @@ export default function Court({
                         height="20"
                         className="svg-icon-white"
                       />
-                      <div>結束比賽</div>
+                      <div>結束</div>
                     </div>
                   </button>
                   <button
@@ -304,13 +342,8 @@ export default function Court({
                     className="btn btn-court rounded-pill"
                   >
                     <div className="d-flex align-items-center gap-1">
-                      <img
-                        src={RandomIcon}
-                        alt="random"
-                        width="20"
-                        height="20"
-                      />
-                      <div>再來一場</div>
+                      <img src={NextIcon} alt="random" width="20" height="20" />
+                      <div>下一場</div>
                     </div>
                   </button>
                 </>
@@ -397,6 +430,16 @@ export default function Court({
           )}
         </>
       )}
+      {/* <div className="fw-bold text-light">
+        <hr />
+        <span>
+          下一場: <span className="text-beginner">A</span>、
+          <span className="text-upper-intermediate">B</span>
+          <span className="mx-2">vs</span>
+          <span className="text-novice">C</span>、
+          <span className="text-beginner">D</span>
+        </span>
+      </div> */}
     </div>
   );
 }
@@ -404,7 +447,11 @@ export default function Court({
 function PlayerCard({ player }) {
   return (
     <div className="col-5 d-flex justify-content-center align-items-center">
-      <span className={`player ${convertLevelItem(player?.level)?.level}`}>
+      <span
+        className={`${
+          player?.status === PLAYER_STATUS["SELECTED"] && "float"
+        } player ${convertLevelItem(player?.level)?.level}`}
+      >
         {SPECIAL_NAME.includes(player?.name) ? "🐶" : ""}
         {player?.name}
       </span>
