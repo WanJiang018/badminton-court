@@ -1,13 +1,16 @@
 import React, { useState, useEffect, useRef } from "react";
 import { PLAYER_STATUS, SPECIAL_NAME } from "../utils/constants";
-import { convertLevelItem, formatTimeDifference } from "../utils/functions";
+import {
+  convertLevelItem,
+  formatTimeDifference,
+  getRandomItem,
+} from "../utils/functions";
 import RandomIcon from "../images/icon-random.png";
 import DeleteIcon from "../images/icon-delete.svg";
 import ResetIcon from "../images/icon-reset.png";
 import ConfirmIcon from "../images/icon-confirm.png";
 import CancelIcon from "../images/icon-cancel.png";
 import ScoreIcon from "../images/icon-21.png";
-import PeopleChangeIcon from "../images/icon-people-change.svg";
 
 export default function Court({
   players,
@@ -39,14 +42,13 @@ export default function Court({
         // Otherwise sort by time
         return a.time - b.time;
       });
-    console.log("restPlayers", restPlayers);
 
     if (!restPlayers || restPlayers?.length < 4) {
       alert("人數不足，無法排場");
       return;
     }
 
-    const player0 = restPlayers[0];
+    const player0 = getRandomItem(restPlayers.slice(0, 4));
     const similarLevelPlayers = getPlayers(player0, restPlayers).slice(0, 3);
     let selectedPlayers = [player0, ...similarLevelPlayers];
     const levelsWithinRange = checkAllSimilarLevelsWithinRange(selectedPlayers);
@@ -314,52 +316,50 @@ export default function Court({
                 </>
               ) : (
                 <>
-                  <div className="mt-3 d-flex justify-content-center gap-3">
-                    <button
-                      className="btn btn-court-outline rounded-pill"
-                      onClick={handleCancelRandom}
-                    >
-                      <div className="d-flex align-items-center gap-1">
-                        <img
-                          src={CancelIcon}
-                          alt="cancel"
-                          width="20"
-                          height="20"
-                          className="svg-icon-white"
-                        />
-                        <div>取消排場</div>
-                      </div>
-                    </button>
-                    <button
-                      className="btn btn-court-outline rounded-pill"
-                      onClick={handleRandom}
-                    >
-                      <div className="d-flex align-items-center gap-1">
-                        <img
-                          src={ResetIcon}
-                          alt="reset"
-                          width="20"
-                          height="20"
-                          className="svg-icon-white"
-                        />
-                        <div>重新排場</div>
-                      </div>
-                    </button>
-                    <button
-                      onClick={handleConfirm}
-                      className="btn btn-court rounded-pill"
-                    >
-                      <div className="d-flex align-items-center gap-1">
-                        <img
-                          src={ConfirmIcon}
-                          alt="confirm"
-                          width="20"
-                          height="20"
-                        />
-                        <div>確定排場</div>
-                      </div>
-                    </button>
-                  </div>
+                  <button
+                    className="btn btn-court-outline rounded-pill"
+                    onClick={handleCancelRandom}
+                  >
+                    <div className="d-flex align-items-center gap-1">
+                      <img
+                        src={CancelIcon}
+                        alt="cancel"
+                        width="20"
+                        height="20"
+                        className="svg-icon-white"
+                      />
+                      <div>取消排場</div>
+                    </div>
+                  </button>
+                  <button
+                    className="btn btn-court-outline rounded-pill"
+                    onClick={handleRandom}
+                  >
+                    <div className="d-flex align-items-center gap-1">
+                      <img
+                        src={ResetIcon}
+                        alt="reset"
+                        width="20"
+                        height="20"
+                        className="svg-icon-white"
+                      />
+                      <div>重新排場</div>
+                    </div>
+                  </button>
+                  <button
+                    onClick={handleConfirm}
+                    className="btn btn-court rounded-pill"
+                  >
+                    <div className="d-flex align-items-center gap-1">
+                      <img
+                        src={ConfirmIcon}
+                        alt="confirm"
+                        width="20"
+                        height="20"
+                      />
+                      <div>確定排場</div>
+                    </div>
+                  </button>
                 </>
               )}
             </div>
@@ -404,11 +404,8 @@ export default function Court({
 function PlayerCard({ player }) {
   return (
     <div className="col-5 d-flex justify-content-center align-items-center">
-      <span
-        className={`player ${
-          SPECIAL_NAME.includes(player?.name) && "rotating-border"
-        } ${convertLevelItem(player?.level)?.level}`}
-      >
+      <span className={`player ${convertLevelItem(player?.level)?.level}`}>
+        {SPECIAL_NAME.includes(player?.name) ? "🐶" : ""}
         {player?.name}
       </span>
       {/* <img src={PeopleChangeIcon} alt="change" width="20" height="20" /> */}
