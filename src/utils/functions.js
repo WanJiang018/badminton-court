@@ -21,12 +21,6 @@ export const getRandomItem = (arr) => {
   return arr[randomIndex];
 };
 
-export const storePlayersData = (players) =>
-  localStorage.setItem("players", JSON.stringify(players));
-
-export const storeCourtsData = (courts) =>
-  localStorage.setItem("courts", JSON.stringify(courts));
-
 export const formatTimeDifference = (pastTime) => {
   const currentTime = new Date().getTime();
   const timeDifference = currentTime - pastTime;

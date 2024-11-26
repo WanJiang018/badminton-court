@@ -1,27 +1,22 @@
 import React, { useState, useEffect, useRef } from "react";
-import { PLAYER_STATUS, SPECIAL_NAME, PLAYER_ACTION } from "../utils/constants";
-import {
-  convertLevelItem,
-  formatTimeDifference,
-  getRandomItem,
-} from "../utils/functions";
+import { useDispatch, useSelector } from "react-redux";
+import { PlayerActionTypes } from "../redux/actions/playerActions";
+import { CourtActionTypes } from "../redux/actions/courtActions";
+import { PLAYER_STATUS } from "../utils/constants";
+import { formatTimeDifference, getRandomItem } from "../utils/functions";
+import PlayerCard from "./PlayerCard";
 import RandomIcon from "../images/icon-random.png";
 import DeleteIcon from "../images/icon-delete.svg";
 import ResetIcon from "../images/icon-reset.png";
-import ConfirmIcon from "../images/icon-confirm.png";
+import ConfirmIcon from "../images/icon-confirm.svg";
 import CancelIcon from "../images/icon-cancel.png";
 import ScoreIcon from "../images/icon-21.png";
 import NextIcon from "../images/icon-next.svg";
-import PauseIcon from "../images/icon-pause.svg";
 
-export default function Court({
-  players,
-  number,
-  virtual,
-  onCreate,
-  onDelete,
-  onUpdatePlayer,
-}) {
+export default function Court({ number, virtual }) {
+  const dispatch = useDispatch();
+  const { courts } = useSelector((state) => state.courts);
+  const { players } = useSelector((state) => state.players);
   const [courtPlayers, setCourtPlayers] = useState([]);
   const [timer, setTimer] = useState();
   const intervalRef = useRef();
@@ -30,8 +25,11 @@ export default function Court({
     const restPlayers = players
       ?.filter(
         (item) =>
-          item.status === PLAYER_STATUS["REST"] ||
-          (item.status === PLAYER_STATUS["SELECTED"] && item.court === number)
+          item.name &&
+          item.name !== "" &&
+          (item.status === PLAYER_STATUS["REST"] ||
+            (item.status === PLAYER_STATUS["SELECTED"] &&
+              item.court === number))
       )
       .sort((a, b) => a.count - b.count)
       .sort((a, b) => {
@@ -94,48 +92,6 @@ export default function Court({
       ];
     }
     updateCourtPlayers(selectedPlayers);
-  };
-
-  const updateCourtPlayers = (selectedPlayers) => {
-    setCourtPlayers(selectedPlayers);
-    onUpdatePlayer(
-      number,
-      PLAYER_ACTION["SELECTED"],
-      selectedPlayers.map((item) => item.id)
-    );
-  };
-
-  const handleFinished = () => {
-    clearInterval(intervalRef?.current);
-    setCourtPlayers([]);
-    onUpdatePlayer(number, PLAYER_ACTION["FINISH"], [
-      courtPlayers[0].id,
-      courtPlayers[1].id,
-      courtPlayers[2].id,
-      courtPlayers[3].id,
-    ]);
-  };
-
-  const handleResetTimer = () => {};
-
-  const handlePause = () => {};
-
-  const handleConfirm = () => {
-    onUpdatePlayer(
-      number,
-      PLAYER_ACTION["GAME"],
-      courtPlayers.map((item) => item.id)
-    );
-  };
-
-  const handleCancelRandom = () => {
-    setCourtPlayers([]);
-    onUpdatePlayer(number, PLAYER_ACTION["CANCEL_SELECTED"], [
-      courtPlayers[0].id,
-      courtPlayers[1].id,
-      courtPlayers[2].id,
-      courtPlayers[3].id,
-    ]);
   };
 
   const checkAllSimilarLevelsWithinRange = (players) => {
@@ -211,19 +167,110 @@ export default function Court({
       .map((item) => item.pair);
   };
 
+  const updateCourtPlayers = (selectedPlayers) => {
+    setCourtPlayers(selectedPlayers);
+
+    players
+      .filter(
+        (item) =>
+          item.court === number && item.status === PLAYER_STATUS["SELECTED"]
+      )
+      .forEach((item) => {
+        dispatch({
+          type: PlayerActionTypes["UPDATE"],
+          payload: {
+            ...item,
+            status: PLAYER_STATUS["REST"],
+            court: undefined,
+            playNo: undefined,
+          },
+        });
+      });
+
+    selectedPlayers.forEach((item, index) => {
+      dispatch({
+        type: PlayerActionTypes["UPDATE"],
+        payload: {
+          ...item,
+          status: PLAYER_STATUS["SELECTED"],
+          court: number,
+          playNo: index,
+        },
+      });
+    });
+  };
+
+  const handleFinished = () => {
+    clearInterval(intervalRef?.current);
+    setCourtPlayers([]);
+    courtPlayers.forEach((item, _index) => {
+      dispatch({
+        type: PlayerActionTypes["UPDATE"],
+        payload: {
+          ...item,
+          status: PLAYER_STATUS["REST"],
+          time: new Date().getTime(),
+          count: item.count + 1,
+          court: undefined,
+          playNo: undefined,
+        },
+      });
+    });
+  };
+
+  const handleConfirm = () => {
+    courtPlayers.forEach((item, _index) => {
+      dispatch({
+        type: PlayerActionTypes["UPDATE"],
+        payload: {
+          ...item,
+          status: PLAYER_STATUS["GAME"],
+          time: new Date().getTime(),
+          court: number,
+        },
+      });
+    });
+  };
+
+  const handleCancelRandom = () => {
+    setCourtPlayers([]);
+    courtPlayers.forEach((item, _index) => {
+      dispatch({
+        type: PlayerActionTypes["UPDATE"],
+        payload: {
+          ...item,
+          status: PLAYER_STATUS["REST"],
+          time: new Date().getTime(),
+          court: undefined,
+          playNo: undefined,
+        },
+      });
+    });
+  };
+
+  const handleCreateCourt = () =>
+    dispatch({
+      type: CourtActionTypes["CREATE"],
+    });
+
+  const handleDeleteCourt = (number) => {
+    const userConfirmed = window.confirm("確定要刪除嗎?");
+    if (userConfirmed) {
+      dispatch({
+        type: CourtActionTypes["DELETE"],
+        payload: number,
+      });
+    }
+  };
+
   useEffect(() => {
-    if (players?.length > 0) {
+    if (!virtual && players?.length > 0) {
       const selectedPlayers = players?.filter((item) => item.court === number);
       if (selectedPlayers.length === 4) {
-        setCourtPlayers([
-          selectedPlayers.find((item) => item.playNo === 0),
-          selectedPlayers.find((item) => item.playNo === 1),
-          selectedPlayers.find((item) => item.playNo === 2),
-          selectedPlayers.find((item) => item.playNo === 3),
-        ]);
+        setCourtPlayers(selectedPlayers.sort((a, b) => a.playNo - b.playNo));
       }
     }
-  }, [number, players]);
+  }, [number, players, virtual]);
 
   useEffect(() => {
     intervalRef.current = setInterval(() => {
@@ -245,14 +292,17 @@ export default function Court({
         </div>
         <div className="court-block court-front row g-0">
           <div className="col-1"></div>
-          <PlayerCard player={courtPlayers[0]} />
-          <PlayerCard player={courtPlayers[1]} />
+          <PlayerCard player={courtPlayers[0]} players={players} />
+          <PlayerCard player={courtPlayers[1]} players={players} />
           <div className="col-1"></div>
         </div>
         <div className="court-block court-middle">
           <div className="d-flex align-items-center gap-2">
             {virtual ? (
-              <button onClick={onCreate} className="fw-bold btn btn-virtual">
+              <button
+                onClick={handleCreateCourt}
+                className="fw-bold btn btn-virtual"
+              >
                 新增場地
               </button>
             ) : (
@@ -268,8 +318,8 @@ export default function Court({
         </div>
         <div className="court-block court-front row g-0">
           <div className="col-1"></div>
-          <PlayerCard player={courtPlayers[2]} />
-          <PlayerCard player={courtPlayers[3]} />
+          <PlayerCard player={courtPlayers[2]} players={players} />
+          <PlayerCard player={courtPlayers[3]} players={players} />
           <div className="col-1"></div>
         </div>
         <div className="court-block court-back row g-0">
@@ -288,38 +338,6 @@ export default function Court({
               ) ? (
                 <>
                   <button
-                    onClick={handleResetTimer}
-                    className="btn btn-court-outline rounded-pill"
-                    disabled
-                  >
-                    <div className="d-flex align-items-center gap-1">
-                      <img
-                        src={ResetIcon}
-                        alt="score"
-                        width="20"
-                        height="20"
-                        className="svg-icon-white"
-                      />
-                      <div>重新</div>
-                    </div>
-                  </button>
-                  <button
-                    onClick={handlePause}
-                    className="btn btn-court-outline rounded-pill"
-                    disabled
-                  >
-                    <div className="d-flex align-items-center gap-1">
-                      <img
-                        src={PauseIcon}
-                        alt="score"
-                        width="20"
-                        height="20"
-                        className="svg-icon-white"
-                      />
-                      <div>暫停</div>
-                    </div>
-                  </button>
-                  <button
                     onClick={handleFinished}
                     className="btn btn-court-outline rounded-pill"
                   >
@@ -331,7 +349,7 @@ export default function Court({
                         height="20"
                         className="svg-icon-white"
                       />
-                      <div>結束</div>
+                      <div>結束比賽</div>
                     </div>
                   </button>
                   <button
@@ -398,10 +416,10 @@ export default function Court({
             </div>
           ) : (
             <div className="mt-3 d-flex justify-content-center gap-3">
-              {onDelete && localStorage.getItem("courts")?.length > 1 && (
+              {courts?.length > 1 && (
                 <button
                   className="btn btn-court-outline rounded-pill"
-                  onClick={() => onDelete(number)}
+                  onClick={() => handleDeleteCourt(number)}
                 >
                   <div className="d-flex align-items-center gap-1">
                     <img
@@ -440,22 +458,6 @@ export default function Court({
           <span className="text-beginner">D</span>
         </span>
       </div> */}
-    </div>
-  );
-}
-
-function PlayerCard({ player }) {
-  return (
-    <div className="col-5 d-flex justify-content-center align-items-center">
-      <span
-        className={`${
-          player?.status === PLAYER_STATUS["SELECTED"] && "float"
-        } player ${convertLevelItem(player?.level)?.level}`}
-      >
-        {SPECIAL_NAME.includes(player?.name) ? "🐶" : ""}
-        {player?.name}
-      </span>
-      {/* <img src={PeopleChangeIcon} alt="change" width="20" height="20" /> */}
     </div>
   );
 }

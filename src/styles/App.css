@@ -389,3 +389,7 @@ select {
 .float {
   animation: float 2s ease-in-out infinite;
 }
+
+.cursor-pointer {
+  cursor: pointer !important;
+}

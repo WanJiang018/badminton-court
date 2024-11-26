@@ -1,4 +1,5 @@
 export const DEFAULT_COURT = 1;
+export const DEFAULT_CREATE_LEVEL = 4;
 export const SPECIAL_NAME = ["加加", "Josie", "josie"];
 export const MENU_DEF = {
   ARRANGE: "arrange",
@@ -18,16 +19,6 @@ export const PLAYER_STATUS = {
   ABSENT: "absent",
   SELECTED: "selected",
   TEMP_LEAVE: "temp-leave",
-};
-
-export const PLAYER_ACTION = {
-  SWITCH_ACTIVE: "switch-active",
-  SWITCH_LEAVE: "switch-leave",
-  DELETE: "delete",
-  SELECTED: "selected",
-  CANCEL_SELECTED: "cancel-selected",
-  FINISH: "finish",
-  GAME: "game",
 };
 
 export const LEVEL_DEF = {
