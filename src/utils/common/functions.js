@@ -1,19 +1,8 @@
-import { LEVELS, PLAYER_STATUS } from "./constants";
+import { LEVELS } from "./constants";
 
 export function convertLevelItem(level) {
   return LEVELS.find((r) => level >= r.min && level <= r.max);
 }
-
-export const isActiveStatus = (status) =>
-  [
-    PLAYER_STATUS["GAME"],
-    PLAYER_STATUS["REST"],
-    PLAYER_STATUS["SELECTED"],
-    PLAYER_STATUS["TEMP_LEAVE"],
-  ].includes(status);
-
-export const isReadOnlyStatus = (status) =>
-  [PLAYER_STATUS["GAME"], PLAYER_STATUS["SELECTED"]].includes(status);
 
 export const getRandomItem = (arr) => {
   if (!arr || arr.length === 0) return null;

@@ -1,13 +1,12 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { PlayerActionTypes } from "../redux/actions/playerActions";
-import { PLAYER_STATUS } from "../utils/constants";
+import { PLAYER_STATUS } from "../utils/players/constants";
 import {
   convertLevelItem,
-  isActiveStatus,
-  isReadOnlyStatus,
   formatTimeDifference,
-} from "../utils/functions";
+} from "../utils/common/functions";
+import { isActiveStatus, isReadOnlyStatus } from "../utils/players/functions";
 import EditIcon from "../images/icon-edit.svg";
 import DeleteIcon from "../images/icon-delete.svg";
 import DowntIcon from "../images/icon-down.svg";

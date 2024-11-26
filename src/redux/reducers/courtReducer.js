@@ -1,5 +1,5 @@
 import { CourtActionTypes } from "../actions/courtActions";
-import { DEFAULT_COURT } from "../../utils/constants";
+import { DEFAULT_COURT } from "../../utils/courts/constants";
 
 const initialState = {
   courts: [],

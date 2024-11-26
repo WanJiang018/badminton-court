@@ -4,8 +4,8 @@ import { PlayerActionTypes } from "../redux/actions/playerActions";
 import {
   ACTIVE_PLAYER_TABLE_COLUMNS,
   INACTIVE_PLAYER_TABLE_COLUMNS,
-} from "../utils/constants";
-import { isActiveStatus } from "../utils/functions";
+} from "../utils/players/constants";
+import { isActiveStatus } from "../utils/players/functions";
 import PlayerTable from "../components/PlayerTable";
 
 export default function Player() {

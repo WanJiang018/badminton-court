@@ -1,5 +1,8 @@
 import { PlayerActionTypes } from "../actions/playerActions";
-import { PLAYER_STATUS, DEFAULT_CREATE_LEVEL } from "../../utils/constants";
+import {
+  PLAYER_STATUS,
+  DEFAULT_CREATE_LEVEL,
+} from "../../utils/players/constants";
 
 const initialState = {
   players: [],

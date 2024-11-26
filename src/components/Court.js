@@ -2,8 +2,13 @@ import React, { useState, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { PlayerActionTypes } from "../redux/actions/playerActions";
 import { CourtActionTypes } from "../redux/actions/courtActions";
-import { PLAYER_STATUS } from "../utils/constants";
-import { formatTimeDifference, getRandomItem } from "../utils/functions";
+import { PLAYER_STATUS } from "../utils/players/constants";
+import { formatTimeDifference } from "../utils/common/functions";
+import {
+  selectInitialPlayers,
+  balancePlayerLevels,
+  adjustPlayerGroups,
+} from "../utils/courts/functions";
 import PlayerCard from "./PlayerCard";
 import RandomIcon from "../images/icon-random.png";
 import DeleteIcon from "../images/icon-delete.svg";
@@ -24,147 +29,24 @@ export default function Court({ number, virtual }) {
   const handleRandom = () => {
     const restPlayers = players
       ?.filter(
-        (item) =>
-          item.name &&
-          item.name !== "" &&
-          (item.status === PLAYER_STATUS["REST"] ||
-            (item.status === PLAYER_STATUS["SELECTED"] &&
-              item.court === number))
+        (player) =>
+          player.name &&
+          (player.status === PLAYER_STATUS.REST ||
+            (player.status === PLAYER_STATUS.SELECTED &&
+              player.court === number))
       )
-      .sort((a, b) => a.count - b.count)
-      .sort((a, b) => {
-        // If both times are undefined, maintain current order
-        if (!a.time && !b.time) return 0;
-        // If a.time is undefined, put a first
-        if (!a.time) return -1;
-        // If b.time is undefined, put b first
-        if (!b.time) return 1;
-        // Otherwise sort by time
-        return a.time - b.time;
-      });
+      .sort((a, b) => a.count - b.count || (a.time || 0) - (b.time || 0));
 
-    if (!restPlayers || restPlayers?.length < 4) {
+    if (!restPlayers || restPlayers.length < 4) {
       alert("人數不足，無法排場");
       return;
     }
 
-    const player0 = getRandomItem(restPlayers.slice(0, 4));
-    const similarLevelPlayers = getPlayers(player0, restPlayers).slice(0, 3);
-    let selectedPlayers = [player0, ...similarLevelPlayers];
-    const levelsWithinRange = checkAllSimilarLevelsWithinRange(selectedPlayers);
+    let selectedPlayers = selectInitialPlayers(restPlayers);
+    selectedPlayers = balancePlayerLevels(selectedPlayers, restPlayers);
+    selectedPlayers = adjustPlayerGroups(selectedPlayers);
 
-    if (!levelsWithinRange) {
-      const player2 = getPlayers(player0, restPlayers)[0];
-
-      const pairPlayer = restPlayers?.filter((item) => item.id !== player0.id);
-      const player1 = getPlayers(player2, pairPlayer)[0];
-
-      const team1Level = player0?.level + player1?.level;
-
-      const team2Players = restPlayers?.filter(
-        (item) => item.id !== player0.id && item.id !== player1.id
-      );
-      const team2Candidates = getTeam2Candidates(
-        team2Players,
-        team1Level
-      ).filter(
-        (item) => item[0].id === player2.id || item[1].id === player2.id
-      );
-      const team2BestPair = findClosestPair(player0, player1, team2Candidates);
-      const player3 = team2BestPair.find((item) => item.id !== player2.id);
-
-      selectedPlayers = [player0, player1, player2, player3];
-    }
-
-    const { maxPlayer, minPlayer } = findMaxMinLevelPlayers(selectedPlayers);
-    const group1 = [selectedPlayers[0].id, selectedPlayers[1].id];
-    const group2 = [selectedPlayers[2].id, selectedPlayers[3].id];
-    if (
-      (group1.includes(maxPlayer.id) && group2.includes(minPlayer.id)) ||
-      (group2.includes(maxPlayer.id) && group1.includes(minPlayer.id))
-    ) {
-      selectedPlayers = [
-        maxPlayer,
-        minPlayer,
-        ...selectedPlayers.filter(
-          (item) => item.id !== maxPlayer.id && item.id !== minPlayer.id
-        ),
-      ];
-    }
     updateCourtPlayers(selectedPlayers);
-  };
-
-  const checkAllSimilarLevelsWithinRange = (players) => {
-    for (let i = 0; i < players.length; i++) {
-      for (let j = i + 1; j < players.length; j++) {
-        if (Math.abs(players[i].level - players[j].level) > 1) {
-          return false;
-        }
-      }
-    }
-    return true;
-  };
-
-  const findClosestPair = (player0, player1, team2Candidates) => {
-    const levelDifferenceA = Math.abs(player0.level - player1.level);
-    let closestPair = null;
-    let closestDifference = Infinity;
-
-    team2Candidates.forEach((pair) => {
-      const [player2, player3] = pair;
-      const levelDifferenceB = Math.abs(player2.level - player3.level);
-      const difference = Math.abs(levelDifferenceA - levelDifferenceB);
-
-      if (difference < closestDifference) {
-        closestDifference = difference;
-        closestPair = pair;
-      }
-    });
-
-    return closestPair;
-  };
-
-  const findMaxMinLevelPlayers = (players) => {
-    if (!players || players.length === 0)
-      return { maxPlayer: null, minPlayer: null };
-
-    let maxPlayer = players[0];
-    let minPlayer = players[0];
-
-    players.forEach((player) => {
-      if (player.level > maxPlayer.level) {
-        maxPlayer = player;
-      }
-      if (player.level < minPlayer.level) {
-        minPlayer = player;
-      }
-    });
-
-    return { maxPlayer, minPlayer };
-  };
-
-  const getPlayers = (player0, players) =>
-    players
-      ?.filter((item) => item?.id !== player0?.id)
-      ?.sort((a, b) => {
-        const diff =
-          Math.abs(player0?.level - a?.level) -
-          Math.abs(player0?.level - b?.level);
-        return diff;
-      })
-      .sort((a, b) => a?.count - b?.count);
-
-  const getTeam2Candidates = (players, level) => {
-    const result = [];
-    for (let i = 0; i < players?.length; i++) {
-      for (let j = i + 1; j < players.length; j++) {
-        const sum = players[i].level + players[j].level;
-        result.push({ pair: [players[i], players[j]], sum });
-      }
-    }
-    return result
-      .sort((a, b) => Math.abs(a.sum - level) - Math.abs(b.sum - level))
-      .map((item) => item.pair);
   };
 
   const updateCourtPlayers = (selectedPlayers) => {
