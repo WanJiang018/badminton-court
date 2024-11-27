@@ -1,21 +1,21 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { PlayerActionTypes } from "../redux/actions/playerActions";
-import { PLAYER_STATUS } from "../utils/players/constants";
+import { PlayerActionTypes } from "../../redux/actions/playerActions";
+import { PLAYER_STATUS } from "../../utils/players/constants";
 import {
   convertLevelItem,
   formatTimeDifference,
-} from "../utils/common/functions";
-import { isActiveStatus, isReadOnlyStatus } from "../utils/players/functions";
-import EditIcon from "../images/icon-edit.svg";
-import DeleteIcon from "../images/icon-delete.svg";
-import DowntIcon from "../images/icon-down.svg";
-import UpIcon from "../images/icon-up.svg";
-import ArrangeIcon from "../images/icon-arrange.svg";
-import CouchIcon from "../images/icon-couch.svg";
-import CouchPurpleIcon from "../images/icon-couch-purple.svg";
-import WarIcon from "../images/icon-war.svg";
-import LeaveIcon from "../images/icon-leave.png";
+} from "../../utils/common/functions";
+import { isActiveStatus, isReadOnlyStatus } from "../../utils/players/functions";
+import EditIcon from "../../images/icon-edit.svg";
+import DeleteIcon from "../../images/icon-delete.svg";
+import DowntIcon from "../../images/icon-down.svg";
+import UpIcon from "../../images/icon-up.svg";
+import ArrangeIcon from "../../images/icon-arrange.svg";
+import CouchIcon from "../../images/icon-couch.svg";
+import CouchPurpleIcon from "../../images/icon-couch-purple.svg";
+import WarIcon from "../../images/icon-war.svg";
+import LeaveIcon from "../../images/icon-leave.png";
 
 export default function PlayerRow({ data }) {
   const dispatch = useDispatch();

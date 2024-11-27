@@ -1,4 +1,4 @@
-import { MENU_ITEMS } from "../utils/common/constants";
+import { MENU_ITEMS } from "../../utils/common/constants";
 
 export default function Menu({ tab, onChangeTab }) {
   return (

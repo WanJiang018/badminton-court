@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { PlayerActionTypes } from "../redux/actions/playerActions";
 import { CourtActionTypes } from "../redux/actions/courtActions";
-import Court from "../components/Court";
+import { Court, GameCourt, VirtualCourtMiddle } from "../components/court";
 
 export default function Arrange() {
   const dispatch = useDispatch();
@@ -22,11 +22,11 @@ export default function Arrange() {
     <div className="row row-cols-1 row-cols-lg-3 g-4 g-lg-4">
       {courtList?.map((number) => (
         <div key={number} className="col">
-          <Court number={number} />
+          <GameCourt number={number} />
         </div>
       ))}
       <div className="col">
-        <Court virtual />
+        <Court middle={<VirtualCourtMiddle />} virtual />
       </div>
     </div>
   );

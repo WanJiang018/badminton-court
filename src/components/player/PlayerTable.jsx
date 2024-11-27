@@ -47,7 +47,7 @@ export default function PlayerTable({ playerList, columns }) {
   useEffect(() => {
     setList(playerList);
   }, [playerList]);
-  console.log("playerList", playerList);
+
   return (
     <>
       {list.length > 0 && (

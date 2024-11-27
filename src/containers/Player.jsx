@@ -6,7 +6,7 @@ import {
   INACTIVE_PLAYER_TABLE_COLUMNS,
 } from "../utils/players/constants";
 import { isActiveStatus } from "../utils/players/functions";
-import PlayerTable from "../components/PlayerTable";
+import PlayerTable from "../components/player/PlayerTable";
 
 export default function Player() {
   const dispatch = useDispatch();

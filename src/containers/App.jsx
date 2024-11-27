@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { MENU_DEF } from "../utils/common/constants";
-import Menu from "../components/Menu";
 import Arrange from "./Arrange";
 import Player from "./Player";
+import Menu from "../components/common/Menu";
 import BadmintonIcon from "../images/icon-badminton.png";
 
 function App() {
