@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "/badminton-court/static/css/main.07509f34.css",
-    "main.js": "/badminton-court/static/js/main.a975be01.js",
+    "main.js": "/badminton-court/static/js/main.5ed524c8.js",
     "static/js/453.35ab5d34.chunk.js": "/badminton-court/static/js/453.35ab5d34.chunk.js",
     "static/media/icon-war.svg": "/badminton-court/static/media/icon-war.b19711c018355097cc02a57a9a13348f.svg",
     "static/media/icon-arrange.svg": "/badminton-court/static/media/icon-arrange.164190ec44c6fa6ac4312f40f7b3e1c7.svg",
@@ -20,11 +20,11 @@
     "static/media/icon-down.svg": "/badminton-court/static/media/icon-down.60705db02ed0e7622a5c3ea1ccde8259.svg",
     "static/media/icon-up.svg": "/badminton-court/static/media/icon-up.e57f6da85ec35f157a3ce92f10786e63.svg",
     "main.07509f34.css.map": "/badminton-court/static/css/main.07509f34.css.map",
-    "main.a975be01.js.map": "/badminton-court/static/js/main.a975be01.js.map",
+    "main.5ed524c8.js.map": "/badminton-court/static/js/main.5ed524c8.js.map",
     "453.35ab5d34.chunk.js.map": "/badminton-court/static/js/453.35ab5d34.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.07509f34.css",
-    "static/js/main.a975be01.js"
+    "static/js/main.5ed524c8.js"
   ]
 }
