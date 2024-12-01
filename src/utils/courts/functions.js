@@ -1,12 +1,37 @@
 import { getRandomItem } from "../common/functions";
+import { PLAYER_STATUS } from "../players/constants";
 
-export const selectInitialPlayers = (restPlayers) => {
+export const getRandomPlayers = (players, number) => {
+  const restPlayers = players
+    .filter(
+      (player) =>
+        player.name &&
+        (player.status === PLAYER_STATUS["REST"] ||
+          ((player.status === PLAYER_STATUS["SELECTING"] ||
+            player.status === PLAYER_STATUS["GAME"]) &&
+            player.court === number))
+    )
+    .sort((a, b) => a.count - b.count || (a.time || 0) - (b.time || 0));
+
+  if (!restPlayers || restPlayers.length < 4) {
+    alert("人數不足，無法排場");
+    return;
+  }
+
+  let selectedPlayers = selectInitialPlayers(restPlayers);
+  selectedPlayers = balancePlayerLevels(selectedPlayers, restPlayers);
+  selectedPlayers = adjustPlayerGroups(selectedPlayers);
+
+  return selectedPlayers;
+};
+
+const selectInitialPlayers = (restPlayers) => {
   const player0 = getRandomItem(restPlayers.slice(0, 4));
   const similarPlayers = getPlayers(player0, restPlayers).slice(0, 3);
   return [player0, ...similarPlayers];
 };
 
-export const balancePlayerLevels = (selectedPlayers, restPlayers) => {
+const balancePlayerLevels = (selectedPlayers, restPlayers) => {
   if (!checkAllSimilarLevelsWithinRange(selectedPlayers)) {
     const player0 = selectedPlayers[0];
     const player2 = getPlayers(player0, restPlayers)[0];
@@ -32,7 +57,7 @@ export const balancePlayerLevels = (selectedPlayers, restPlayers) => {
   return selectedPlayers;
 };
 
-export const adjustPlayerGroups = (selectedPlayers) => {
+const adjustPlayerGroups = (selectedPlayers) => {
   const { maxPlayer, minPlayer } = findMaxMinLevelPlayers(selectedPlayers);
   const group1 = [selectedPlayers[0].id, selectedPlayers[1].id];
   const group2 = [selectedPlayers[2].id, selectedPlayers[3].id];

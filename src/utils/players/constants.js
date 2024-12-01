@@ -5,8 +5,9 @@ export const PLAYER_STATUS = {
   GAME: "game",
   REST: "rest",
   ABSENT: "absent",
-  SELECTED: "selected",
+  SELECTING: "selecting",
   TEMP_LEAVE: "temp-leave",
+  PREPARE_NEXT: "prepare-next",
 };
 
 export const ACTIVE_PLAYER_TABLE_COLUMNS = [

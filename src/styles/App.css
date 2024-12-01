@@ -170,6 +170,15 @@ body {
   width: 16px;
   height: 16px;
 }
+.btn.btn-status {
+  color: #279469;
+  font-weight: bold;
+}
+.btn.btn-status:active,
+.btn.btn-status:hover {
+  background: #9fddcd;
+  border: 1px solid #9fddcd;
+}
 .btn.btn-edit {
   background: #e8f3ef;
   border: 1px solid #e8f3ef;
@@ -233,13 +242,17 @@ body {
   background: #dcf3e5;
   color: #30885a;
 }
-.status.selected {
+.status.selecting {
   background: #fff6e3;
   color: #d16d3e;
 }
 .status.temp-leave {
   background: #efedf6;
   color: #882fe0;
+}
+.status.prepare-next {
+  background: #e6eeff;
+  color: #367afb;
 }
 
 /* player */
@@ -251,7 +264,10 @@ body {
   font-weight: bold;
   color: #333;
 }
-
+.player.small {
+  font-size: 14px;
+  padding: 2px 8px;
+}
 /* level */
 .level-number.beginner {
   color: #137636;
