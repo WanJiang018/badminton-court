@@ -1,13 +1,7 @@
 import React, { useState, useEffect, useRef, useMemo } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { PlayerActionTypes } from "../../redux/actions/playerActions";
+import { useSelector } from "react-redux";
 import GameCourtContext from "../../context/GameCourtContext";
 import { PLAYER_STATUS } from "../../utils/players/constants";
-import {
-  selectInitialPlayers,
-  balancePlayerLevels,
-  adjustPlayerGroups,
-} from "../../utils/courts/functions";
 import Court from "./Court";
 import GameCourtMiddle from "./GameCourtMiddle";
 import IdleCourtAction from "./IdleCourtAction";
@@ -16,7 +10,6 @@ import SelectingCourtAction from "./SelectingCourtAction";
 import PlayerCard from "./PlayerCard";
 
 export default function GameCourt({ number }) {
-  const dispatch = useDispatch();
   const { players } = useSelector((state) => state.players);
   const intervalRef = useRef();
   const [courtPlayers, setCourtPlayers] = useState([]);
@@ -51,7 +44,10 @@ export default function GameCourt({ number }) {
       <Court
         middle={<GameCourtMiddle />}
         players={courtPlayers?.map((player) => (
-          <div className="d-flex justify-content-center align-items-center h-100">
+          <div
+            key={player?.id}
+            className="d-flex justify-content-center align-items-center h-100"
+          >
             <PlayerCard player={player} />
           </div>
         ))}
@@ -81,7 +77,7 @@ export default function GameCourt({ number }) {
                     .sort((a, b) => a.playNo - b.playNo)
                     .map((item, index) => (
                       <>
-                        <PlayerCard player={item} key={index} size="small" />
+                        <PlayerCard player={item} key={item?.id} size="small" />
                         {index === 1 && <span className="fs-6">vs</span>}
                       </>
                     ))}
