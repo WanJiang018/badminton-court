@@ -201,37 +201,6 @@ body {
   background: #cccccc;
   border: 1px solid #cccccc;
 }
-.btn.btn-delete {
-  background: #ffede7;
-  border: 1px solid #ffede7;
-}
-.btn.btn-delete:active,
-.btn.btn-delete:hover {
-  background: #ffccbb;
-  border: 1px solid #ffccbb;
-}
-.btn.btn-switch {
-  background: #e6eeff;
-  border: 1px solid #e6eeff;
-  color: #367afb;
-  font-weight: bold;
-}
-.btn.btn-switch:active,
-.btn.btn-switch:hover {
-  background: #bfcff2;
-  border: 1px solid #bfcff2;
-}
-.btn.btn-leave {
-  background: #efedf6;
-  border: 1px solid #efedf6;
-  color: #882fe0;
-  font-weight: bold;
-}
-.btn.btn-leave:active,
-.btn.btn-leave:hover {
-  background: #dcd6f4;
-  border: 1px solid #dcd6f4;
-}
 
 /* status */
 .status.game {
@@ -253,6 +222,10 @@ body {
 .status.prepare-next {
   background: #e6eeff;
   color: #367afb;
+}
+.status.absent {
+  background: #e8e8e8;
+  color: #696969;
 }
 
 /* player */
@@ -334,17 +307,17 @@ body {
 }
 
 /* table */
-.table-main {
-  --bs-table-color: #333;
-  --bs-table-bg: #eee;
-  --bs-table-border-color: #dee2e6;
-  --bs-table-striped-bg: #2c3034;
-  --bs-table-striped-color: #fff;
+.table {
+  --bs-table-color: #212529;
+  --bs-table-bg: #fff;
+  --bs-table-border-color: #e7eaec;
+  --bs-table-striped-bg: #f7f7f7;
+  --bs-table-striped-color: #212529;
   --bs-table-active-bg: #373b3e;
   --bs-table-active-color: #fff;
   --bs-table-hover-bg: #323539;
   --bs-table-hover-color: #fff;
-  color: var(--bs-table-color);
+  color: #212529;
   border-color: var(--bs-table-border-color);
 }
 .table td,
@@ -381,6 +354,18 @@ select {
   text-overflow: ellipsis;
   display: block;
   overflow: hidden;
+}
+.form-check-input:checked {
+  background-color: #279469;
+  border-color: #279469;
+}
+.form-check-input {
+  width: 18px;
+  height: 18px;
+}
+
+.form-check-input[type="checkbox"].indeterminate {
+  background-image: url("data:image/svg+xml;charset=utf-8;base64,PHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHZpZXdCb3g9JzAgMCAyMCAyMCc+PHBhdGggZmlsbD0nbm9uZScgc3Ryb2tlPScjZmZmJyBzdHJva2UtbGluZWNhcD0ncm91bmQnIHN0cm9rZS1saW5lam9pbj0ncm91bmQnIHN0cm9rZS13aWR0aD0nMycgZD0nTTYgMTBoOCcvPjwvc3ZnPg==");
 }
 
 .badge {

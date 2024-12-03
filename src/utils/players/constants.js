@@ -10,16 +10,11 @@ export const PLAYER_STATUS = {
   PREPARE_NEXT: "prepare-next",
 };
 
-export const ACTIVE_PLAYER_TABLE_COLUMNS = [
+export const PLAYER_TABLE_COLUMNS = [
+  { name: "", key: "checkbox" },
   { name: "姓名", key: "name" },
   { name: "等級", key: "level", sort: true },
+  { name: "上場數", key: "count", sort: true },
   { name: "狀態", key: ["status", "court"], sort: true },
-  { name: "上場次數", key: "count", sort: true },
-  { name: "", key: "action" },
-];
-
-export const INACTIVE_PLAYER_TABLE_COLUMNS = [
-  { name: "姓名", key: "name" },
-  { name: "等級", key: "level", sort: true },
   { name: "", key: "action" },
 ];

@@ -12,14 +12,12 @@ import {
 } from "../../utils/players/functions";
 import EditIcon from "../../images/icon-edit.svg";
 import DeleteIcon from "../../images/icon-delete.svg";
-import DowntIcon from "../../images/icon-down.svg";
-import UpIcon from "../../images/icon-up.svg";
 import ArrangeIcon from "../../images/icon-arrange.svg";
 import CouchIcon from "../../images/icon-couch.svg";
 import WarIcon from "../../images/icon-war.svg";
-import LeaveIcon from "../../images/icon-leave.svg";
 import LeavePurpleIcon from "../../images/icon-leave-purple.svg";
 import PrepareIcon from "../../images/icon-stopwatch.svg";
+import AbsentIcon from "../../images/icon-xmark.svg";
 
 export default function PlayerRow({ data }) {
   const dispatch = useDispatch();
@@ -37,31 +35,6 @@ export default function PlayerRow({ data }) {
 
   const handleEdit = () => {
     setEditMode(true);
-  };
-  const handleSwitchLeave = () => {
-    dispatch({
-      type: PlayerActionTypes["UPDATE"],
-      payload: {
-        ...data,
-        status:
-          status === PLAYER_STATUS["TEMP_LEAVE"]
-            ? PLAYER_STATUS["REST"]
-            : PLAYER_STATUS["TEMP_LEAVE"],
-      },
-    });
-  };
-
-  const handleSwitchActive = () => {
-    dispatch({
-      type: PlayerActionTypes["UPDATE"],
-      payload: {
-        ...data,
-        status:
-          status === PLAYER_STATUS["ABSENT"]
-            ? PLAYER_STATUS["REST"]
-            : PLAYER_STATUS["ABSENT"],
-      },
-    });
   };
 
   const handleSave = () => {
@@ -109,6 +82,18 @@ export default function PlayerRow({ data }) {
     }
   };
 
+  const handleCheck = () => {
+    dispatch({
+      type: PlayerActionTypes["UPDATE"],
+      payload: {
+        ...data,
+        status: isActiveStatus(status)
+          ? PLAYER_STATUS["ABSENT"]
+          : PLAYER_STATUS["REST"],
+      },
+    });
+  };
+
   useEffect(() => {
     intervalRef.current = setInterval(() => {
       if (time) {
@@ -121,6 +106,19 @@ export default function PlayerRow({ data }) {
   return (
     <>
       <tr>
+        {/* active */}
+        <td>
+          {isReadOnlyStatus(status) ? (
+            <input type="checkbox" class="form-check-input" checked disabled />
+          ) : (
+            <input
+              type="checkbox"
+              class="form-check-input"
+              checked={isActiveStatus(status)}
+              onChange={handleCheck}
+            />
+          )}
+        </td>
         {/* name */}
         <td>
           {editMode ? (
@@ -165,51 +163,50 @@ export default function PlayerRow({ data }) {
             </div>
           )}
         </td>
-        {/* status */}
-        {status !== PLAYER_STATUS["ABSENT"] && (
-          <td>
-            <span className={`badge rounded-pill status ${status}`}>
-              {status === PLAYER_STATUS["GAME"] && (
-                <div className="d-flex align-items-center gap-1">
-                  <img src={WarIcon} alt="game" width="12" height="12" />
-                  {court} 號場對戰
-                </div>
-              )}
-              {status === PLAYER_STATUS["SELECTING"] && (
-                <div className="d-flex align-items-center gap-1">
-                  <img src={ArrangeIcon} alt="arrange" width="12" height="12" />
-                  {court} 號場排場
-                </div>
-              )}
-              {status === PLAYER_STATUS["REST"] && (
-                <div className="d-flex align-items-center gap-1">
-                  <img src={CouchIcon} alt="rest" width="12" height="12" />
-                  場下休息
-                </div>
-              )}
-              {status === PLAYER_STATUS["TEMP_LEAVE"] && (
-                <div className="d-flex align-items-center gap-1">
-                  <img
-                    src={LeavePurpleIcon}
-                    alt="leave"
-                    width="12"
-                    height="12"
-                  />
-                  暫時離開
-                </div>
-              )}
-              {status === PLAYER_STATUS["PREPARE_NEXT"] && (
-                <div className="d-flex align-items-center gap-1">
-                  <img src={PrepareIcon} alt="leave" width="12" height="12" />
-                  {court} 號場準備
-                </div>
-              )}
-            </span>
-            {time && <span className="text-muted fs-8 ms-md-2">{timer}</span>}
-          </td>
-        )}
         {/* count */}
-        {isActiveStatus(status) && <td>{count ?? 0}</td>}
+        {isActiveStatus(status) ? <td>{count ?? 0}</td> : <td>-</td>}
+        {/* status */}
+        <td>
+          <span className={`badge rounded-pill status ${status}`}>
+            {status === PLAYER_STATUS["GAME"] && (
+              <div className="d-flex align-items-center gap-1">
+                <img src={WarIcon} alt="game" width="12" height="12" />
+                {court} 號場對戰
+              </div>
+            )}
+            {status === PLAYER_STATUS["SELECTING"] && (
+              <div className="d-flex align-items-center gap-1">
+                <img src={ArrangeIcon} alt="arrange" width="12" height="12" />
+                {court} 號場排場
+              </div>
+            )}
+            {status === PLAYER_STATUS["REST"] && (
+              <div className="d-flex align-items-center gap-1">
+                <img src={CouchIcon} alt="rest" width="12" height="12" />
+                場下休息
+              </div>
+            )}
+            {status === PLAYER_STATUS["TEMP_LEAVE"] && (
+              <div className="d-flex align-items-center gap-1">
+                <img src={LeavePurpleIcon} alt="leave" width="12" height="12" />
+                暫時離開
+              </div>
+            )}
+            {status === PLAYER_STATUS["PREPARE_NEXT"] && (
+              <div className="d-flex align-items-center gap-1">
+                <img src={PrepareIcon} alt="leave" width="12" height="12" />
+                {court} 號場準備
+              </div>
+            )}
+            {status === PLAYER_STATUS["ABSENT"] && (
+              <div className="d-flex align-items-center gap-1">
+                <img src={AbsentIcon} alt="leave" width="12" height="12" />
+                今日未出席
+              </div>
+            )}
+          </span>
+          {time && <span className="text-muted fs-8 ms-md-2">{timer}</span>}
+        </td>
         {/* action */}
         {editMode ? (
           <td>
@@ -224,47 +221,18 @@ export default function PlayerRow({ data }) {
           </td>
         ) : (
           <td>
-            <div className="d-flex flex-column flex-md-row gap-2">
-              {!isReadOnlyStatus(status) && (
-                <>
-                  <div className="d-flex gap-2">
-                    <button className="btn btn-icon btn-status">
-                      <img src={EditIcon} alt="edit" onClick={handleEdit} />
-                    </button>
-                    <button className="btn btn-icon btn-status">
-                      <img
-                        src={DeleteIcon}
-                        alt="delete"
-                        onClick={handleDelete}
-                      />
-                    </button>
-                  </div>
-                  <div className="d-flex gap-2">
-                    {(status === PLAYER_STATUS["REST"] ||
-                      status === PLAYER_STATUS["TEMP_LEAVE"]) && (
-                      <button className="btn btn-icon btn-status">
-                        <img
-                          src={
-                            status === PLAYER_STATUS["REST"]
-                              ? LeaveIcon
-                              : CouchIcon
-                          }
-                          onClick={handleSwitchLeave}
-                          alt="leave"
-                        />
-                      </button>
-                    )}
-                    <button className="btn btn-icon btn-status">
-                      <img
-                        src={isActiveStatus(status) ? DowntIcon : UpIcon}
-                        onClick={handleSwitchActive}
-                        alt="switch"
-                      />
-                    </button>
-                  </div>
-                </>
-              )}
-            </div>
+            {!isReadOnlyStatus(status) && (
+              <>
+                <div className="d-flex gap-2">
+                  <button className="btn btn-icon btn-status">
+                    <img src={EditIcon} alt="edit" onClick={handleEdit} />
+                  </button>
+                  <button className="btn btn-icon btn-status">
+                    <img src={DeleteIcon} alt="delete" onClick={handleDelete} />
+                  </button>
+                </div>
+              </>
+            )}
           </td>
         )}
       </tr>

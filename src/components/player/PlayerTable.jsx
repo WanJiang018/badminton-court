@@ -1,9 +1,12 @@
 import React, { useState, useEffect } from "react";
+import { useSelector } from "react-redux";
+import { PLAYER_TABLE_COLUMNS } from "../../utils/players/constants";
 import PlayerTableHead from "./PlayerTableHead";
 import PlayerRow from "./PlayerRow";
 
-export default function PlayerTable({ playerList, columns }) {
-  const [list, setList] = useState(playerList);
+export default function PlayerTable() {
+  const [list, setList] = useState([]);
+  const { players } = useSelector((state) => state.players);
 
   const onSort = (key, order = "desc") => {
     setList((p) =>
@@ -45,21 +48,19 @@ export default function PlayerTable({ playerList, columns }) {
   };
 
   useEffect(() => {
-    setList(playerList);
-  }, [playerList]);
+    setList(players);
+  }, [players]);
 
   return (
-    <>
-      {list.length > 0 && (
-        <table className="table table-bordered">
-          <PlayerTableHead columns={columns} onSort={onSort} />
-          <tbody>
-            {list.map((player) => (
-              <PlayerRow key={player.id} data={player} />
-            ))}
-          </tbody>
-        </table>
-      )}
-    </>
+    list?.length > 0 && (
+      <table className="table table-striped">
+        <PlayerTableHead columns={PLAYER_TABLE_COLUMNS} onSort={onSort} />
+        <tbody>
+          {list.map((player) => (
+            <PlayerRow key={player.id} data={player} />
+          ))}
+        </tbody>
+      </table>
+    )
   );
 }

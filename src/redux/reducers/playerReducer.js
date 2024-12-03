@@ -47,7 +47,7 @@ const playerReducer = (state = initialState, action) => {
       const newPlayers = state.players.map((player) => ({
         ...player,
         count: 0,
-        status: PLAYER_STATUS["REST"],
+        status: PLAYER_STATUS["ABSENT"],
         court: undefined,
         playNo: undefined,
         time: undefined,
