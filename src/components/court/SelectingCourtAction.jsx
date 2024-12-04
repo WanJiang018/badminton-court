@@ -4,7 +4,6 @@ import { PlayerActionTypes } from "../../redux/actions/playerActions";
 import { useGameCourtContext } from "../../context/GameCourtContext";
 import { PLAYER_STATUS } from "../../utils/players/constants";
 import { getRandomPlayers } from "../../utils/courts/functions";
-import ResetIcon from "../../images/icon-reset.png";
 import RandomIcon from "../../images/icon-random.png";
 import ConfirmIcon from "../../images/icon-confirm.svg";
 import CancelIcon from "../../images/icon-cancel.png";
@@ -44,8 +43,8 @@ export default function SelectingCourtAction() {
     const restPlayers = players.filter((item) =>
       courtPlayers.every((player) => player.id !== item.id)
     );
-    const selectedNextPlayers = getRandomPlayers(restPlayers, number);
-    selectedNextPlayers.forEach((item, index) => {
+    const selectedNextPlayers = getRandomPlayers(restPlayers, number, false);
+    selectedNextPlayers?.forEach((item, index) => {
       dispatch({
         type: PlayerActionTypes["UPDATE"],
         payload: {
@@ -105,19 +104,7 @@ export default function SelectingCourtAction() {
             height="20"
             className="svg-icon-white"
           />
-          <div>取消</div>
-        </div>
-      </button>
-      <button className="btn btn-court-outline rounded-pill">
-        <div className="d-flex align-items-center gap-1">
-          <img
-            src={ResetIcon}
-            alt="reset"
-            width="20"
-            height="20"
-            className="svg-icon-white"
-          />
-          <div>回上一步</div>
+          <div>取消排場</div>
         </div>
       </button>
       <button
@@ -138,7 +125,7 @@ export default function SelectingCourtAction() {
       <button onClick={handleConfirm} className="btn btn-court rounded-pill">
         <div className="d-flex align-items-center gap-1">
           <img src={ConfirmIcon} alt="confirm" width="20" height="20" />
-          <div>確定</div>
+          <div>確定排場</div>
         </div>
       </button>
     </>

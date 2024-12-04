@@ -6,7 +6,6 @@ import { PLAYER_STATUS } from "../../utils/players/constants";
 import { getRandomPlayers } from "../../utils/courts/functions";
 import ScoreIcon from "../../images/icon-21.png";
 import NextIcon from "../../images/icon-next.svg";
-import ResetIcon from "../../images/icon-reset.png";
 
 export default function PlayCourtAction() {
   const dispatch = useDispatch();
@@ -18,7 +17,7 @@ export default function PlayCourtAction() {
       item.court === number && item.status === PLAYER_STATUS["PREPARE_NEXT"]
   );
 
-  const handleFinished = () => {
+  const finishGame = () => {
     clearInterval(intervalRef?.current);
     courtPlayers.forEach((item, _index) => {
       dispatch({
@@ -47,53 +46,65 @@ export default function PlayCourtAction() {
     });
   };
 
+  const handleFinished = () => {
+    const userConfirmed = window.confirm("確定要結束比賽嗎?");
+
+    if (userConfirmed) {
+      finishGame();
+    }
+  };
+
   const handleNext = () => {
-    handleFinished();
-    nextPlayers?.forEach((item, _index) => {
-      dispatch({
-        type: PlayerActionTypes["UPDATE"],
-        payload: {
-          ...item,
-          status: PLAYER_STATUS["GAME"],
-          time: new Date().getTime(),
-          court: number,
-        },
-      });
-    });
+    const userConfirmed = window.confirm("確定要進行下一場嗎?");
 
-    const restPlayers = players.filter((item) =>
-      nextPlayers.every((player) => player.id !== item.id)
-    );
-    const selectedPlayers = getRandomPlayers(restPlayers, number);
-    selectedPlayers?.forEach((item, index) => {
-      dispatch({
-        type: PlayerActionTypes["UPDATE"],
-        payload: {
-          ...item,
-          status: PLAYER_STATUS["PREPARE_NEXT"],
-          court: number,
-          playNo: index,
-          time: undefined,
-        },
-      });
-    });
-
-    players
-      .filter(
-        (item) =>
-          item.court === number && item.status === PLAYER_STATUS["SELECTING"]
-      )
-      .forEach((item) => {
+    if (userConfirmed) {
+      finishGame();
+      nextPlayers?.forEach((item, _index) => {
         dispatch({
           type: PlayerActionTypes["UPDATE"],
           payload: {
             ...item,
-            status: PLAYER_STATUS["REST"],
-            court: undefined,
-            playNo: undefined,
+            status: PLAYER_STATUS["GAME"],
+            time: new Date().getTime(),
+            court: number,
           },
         });
       });
+
+      const restPlayers = players.filter((item) =>
+        nextPlayers.every((player) => player.id !== item.id)
+      );
+      const selectedPlayers = getRandomPlayers(restPlayers, number);
+      selectedPlayers?.forEach((item, index) => {
+        dispatch({
+          type: PlayerActionTypes["UPDATE"],
+          payload: {
+            ...item,
+            status: PLAYER_STATUS["PREPARE_NEXT"],
+            court: number,
+            playNo: index,
+            time: undefined,
+          },
+        });
+      });
+
+      players
+        .filter(
+          (item) =>
+            item.court === number && item.status === PLAYER_STATUS["SELECTING"]
+        )
+        .forEach((item) => {
+          dispatch({
+            type: PlayerActionTypes["UPDATE"],
+            payload: {
+              ...item,
+              status: PLAYER_STATUS["REST"],
+              court: undefined,
+              playNo: undefined,
+            },
+          });
+        });
+    }
   };
 
   return (
@@ -113,24 +124,14 @@ export default function PlayCourtAction() {
           <div>結束比賽</div>
         </div>
       </button>
-      <button className="btn btn-court-outline rounded-pill">
-        <div className="d-flex align-items-center gap-1">
-          <img
-            src={ResetIcon}
-            alt="reset"
-            width="20"
-            height="20"
-            className="svg-icon-white"
-          />
-          <div>回上一步</div>
-        </div>
-      </button>
-      <button onClick={handleNext} className="btn btn-court rounded-pill">
-        <div className="d-flex align-items-center gap-1">
-          <img src={NextIcon} alt="random" width="20" height="20" />
-          <div>下一場</div>
-        </div>
-      </button>
+      {nextPlayers?.length > 0 && (
+        <button onClick={handleNext} className="btn btn-court rounded-pill">
+          <div className="d-flex align-items-center gap-1">
+            <img src={NextIcon} alt="random" width="20" height="20" />
+            <div>下一場</div>
+          </div>
+        </button>
+      )}
     </>
   );
 }

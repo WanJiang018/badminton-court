@@ -1,7 +1,7 @@
 import { getRandomItem } from "../common/functions";
 import { PLAYER_STATUS } from "../players/constants";
 
-export const getRandomPlayers = (players, number) => {
+export const getRandomPlayers = (players, number, showAlert = true) => {
   const restPlayers = players
     .filter(
       (player) =>
@@ -14,7 +14,9 @@ export const getRandomPlayers = (players, number) => {
     .sort((a, b) => a.count - b.count || (a.time || 0) - (b.time || 0));
 
   if (!restPlayers || restPlayers.length < 4) {
-    alert("人數不足，無法排場");
+    if (showAlert) {
+      alert("人數不足，無法排場");
+    }
     return;
   }
 

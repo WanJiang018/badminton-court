@@ -76,10 +76,10 @@ export default function GameCourt({ number }) {
                     )
                     .sort((a, b) => a.playNo - b.playNo)
                     .map((item, index) => (
-                      <>
-                        <PlayerCard player={item} key={item?.id} size="small" />
+                      <React.Fragment key={item?.id}>
+                        <PlayerCard player={item} size="small" />
                         {index === 1 && <span className="fs-6">vs</span>}
-                      </>
+                      </React.Fragment>
                     ))}
                 </div>
               </div>

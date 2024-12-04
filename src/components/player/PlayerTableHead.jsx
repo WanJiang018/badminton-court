@@ -2,7 +2,10 @@ import React, { useState, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { PlayerActionTypes } from "../../redux/actions/playerActions";
 import { PLAYER_STATUS } from "../../utils/players/constants";
-import { isActiveStatus } from "../../utils/players/functions";
+import {
+  isActiveStatus,
+  isReadOnlyStatus,
+} from "../../utils/players/functions";
 
 export default function PlayerTableHead({ columns, onSort }) {
   const dispatch = useDispatch();
@@ -28,25 +31,27 @@ export default function PlayerTableHead({ columns, onSort }) {
   }, [players]);
 
   const handleCheckAll = () => {
-    players.forEach((item) => {
-      let status = item.status;
-      if (statusCounts.isInterminate) {
-        if (!isActiveStatus(status)) {
+    players
+      .filter((item) => !isReadOnlyStatus(item.status))
+      .forEach((item) => {
+        let status = item.status;
+        if (statusCounts.isInterminate) {
+          if (!isActiveStatus(status)) {
+            status = PLAYER_STATUS["REST"];
+          }
+        } else if (statusCounts.isAllActive) {
+          status = PLAYER_STATUS["ABSENT"];
+        } else if (statusCounts.isAllInactive) {
           status = PLAYER_STATUS["REST"];
         }
-      } else if (statusCounts.isAllActive) {
-        status = PLAYER_STATUS["ABSENT"];
-      } else if (statusCounts.isAllInactive) {
-        status = PLAYER_STATUS["REST"];
-      }
-      dispatch({
-        type: PlayerActionTypes["UPDATE"],
-        payload: {
-          ...item,
-          status,
-        },
+        dispatch({
+          type: PlayerActionTypes["UPDATE"],
+          payload: {
+            ...item,
+            status,
+          },
+        });
       });
-    });
   };
 
   return (
