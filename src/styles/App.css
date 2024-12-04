@@ -110,7 +110,6 @@ body {
 
 @media (min-width: 576px) {
   .btn {
-    font-size: 14px;
     padding: 6px 12px;
   }
 }
@@ -393,4 +392,10 @@ select {
 
 .cursor-pointer {
   cursor: pointer !important;
+}
+
+.player-block {
+  border: 2px dashed #307a59;
+  padding: 10px;
+  border-radius: 10px;
 }

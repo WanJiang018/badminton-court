@@ -15,28 +15,6 @@ export default function PlayerTableHead({ columns, onSort }) {
     onSort(field, newOrder);
   };
 
-  const isAllActive = useMemo(
-    () =>
-      players.filter((item) => isActiveStatus(item.status))?.length ===
-      players?.length,
-    [players]
-  );
-
-  const isAllInactive = useMemo(
-    () =>
-      players.filter((item) => !isActiveStatus(item.status))?.length ===
-      players?.length,
-    [players]
-  );
-
-  const isInterminate = useMemo(
-    () =>
-      players.some((item) => isActiveStatus(item.status)) &&
-      players.filter((item) => isActiveStatus(item.status))?.length !==
-        players?.length,
-    [players]
-  );
-
   const statusCounts = useMemo(() => {
     const activeCount = players.filter((item) =>
       isActiveStatus(item.status)
@@ -89,7 +67,11 @@ export default function PlayerTableHead({ columns, onSort }) {
           ) : (
             <th
               key={item.key}
-              className={item.sort && `sort ${sortOrders[item.key]}`}
+              className={
+                item.sort
+                  ? `sort ${sortOrders[item.key] ? sortOrders[item.key] : ""}`
+                  : ""
+              }
               onClick={() => item.sort && handleSort(item.key)}
             >
               {item.name}

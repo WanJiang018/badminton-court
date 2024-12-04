@@ -5,6 +5,7 @@ import { useGameCourtContext } from "../../context/GameCourtContext";
 import { PLAYER_STATUS } from "../../utils/players/constants";
 import { getRandomPlayers } from "../../utils/courts/functions";
 import ResetIcon from "../../images/icon-reset.png";
+import RandomIcon from "../../images/icon-random.png";
 import ConfirmIcon from "../../images/icon-confirm.svg";
 import CancelIcon from "../../images/icon-cancel.png";
 
@@ -104,13 +105,10 @@ export default function SelectingCourtAction() {
             height="20"
             className="svg-icon-white"
           />
-          <div>取消排場</div>
+          <div>取消</div>
         </div>
       </button>
-      <button
-        className="btn btn-court-outline rounded-pill"
-        onClick={handleRandom}
-      >
+      <button className="btn btn-court-outline rounded-pill">
         <div className="d-flex align-items-center gap-1">
           <img
             src={ResetIcon}
@@ -119,13 +117,28 @@ export default function SelectingCourtAction() {
             height="20"
             className="svg-icon-white"
           />
-          <div>重新排場</div>
+          <div>回上一步</div>
+        </div>
+      </button>
+      <button
+        className="btn btn-court-outline rounded-pill"
+        onClick={handleRandom}
+      >
+        <div className="d-flex align-items-center gap-1">
+          <img
+            src={RandomIcon}
+            alt="reset"
+            width="20"
+            height="20"
+            className="svg-icon-white"
+          />
+          <div>隨機排場</div>
         </div>
       </button>
       <button onClick={handleConfirm} className="btn btn-court rounded-pill">
         <div className="d-flex align-items-center gap-1">
           <img src={ConfirmIcon} alt="confirm" width="20" height="20" />
-          <div>確定排場</div>
+          <div>確定</div>
         </div>
       </button>
     </>

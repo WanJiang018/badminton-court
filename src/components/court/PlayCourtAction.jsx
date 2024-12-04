@@ -6,6 +6,7 @@ import { PLAYER_STATUS } from "../../utils/players/constants";
 import { getRandomPlayers } from "../../utils/courts/functions";
 import ScoreIcon from "../../images/icon-21.png";
 import NextIcon from "../../images/icon-next.svg";
+import ResetIcon from "../../images/icon-reset.png";
 
 export default function PlayCourtAction() {
   const dispatch = useDispatch();
@@ -110,6 +111,18 @@ export default function PlayCourtAction() {
             className="svg-icon-white"
           />
           <div>結束比賽</div>
+        </div>
+      </button>
+      <button className="btn btn-court-outline rounded-pill">
+        <div className="d-flex align-items-center gap-1">
+          <img
+            src={ResetIcon}
+            alt="reset"
+            width="20"
+            height="20"
+            className="svg-icon-white"
+          />
+          <div>回上一步</div>
         </div>
       </button>
       <button onClick={handleNext} className="btn btn-court rounded-pill">

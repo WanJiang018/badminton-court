@@ -53,14 +53,25 @@ export default function PlayerTable() {
 
   return (
     list?.length > 0 && (
-      <table className="table table-striped">
-        <PlayerTableHead columns={PLAYER_TABLE_COLUMNS} onSort={onSort} />
-        <tbody>
-          {list.map((player) => (
-            <PlayerRow key={player.id} data={player} />
-          ))}
-        </tbody>
-      </table>
+      <div
+        style={{
+          "overflow-x": "scroll",
+        }}
+      >
+        <table
+          className="table table-striped"
+          style={{
+            minWidth: "450px",
+          }}
+        >
+          <PlayerTableHead columns={PLAYER_TABLE_COLUMNS} onSort={onSort} />
+          <tbody>
+            {list.map((player) => (
+              <PlayerRow key={player.id} data={player} />
+            ))}
+          </tbody>
+        </table>
+      </div>
     )
   );
 }
