@@ -24,10 +24,9 @@ export default function GameCourtMiddle() {
   return (
     <div className="d-flex align-items-center gap-2">
       <div className="court-no fw-bold fs-5">{number}</div>
-      {courtPlayers?.length === 4 &&
-        courtPlayers?.every(
-          (item) => item.status === PLAYER_STATUS["GAME"]
-        ) && <div className="fs-6 text-white">{timer}</div>}
+      {courtPlayers?.every((item) => item.status === PLAYER_STATUS["GAME"]) && (
+        <div className="fs-6 text-white">{timer}</div>
+      )}
     </div>
   );
 }

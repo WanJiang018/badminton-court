@@ -52,12 +52,11 @@ export default function Player() {
               </button>
             </div>
             <PlayerTable />
-            <button className="btn btn-edit" onClick={handleCreate}>
-              + 新增球友
-            </button>
           </div>
         )}
-        <div></div>
+        <button className="btn btn-edit" onClick={handleCreate}>
+          + 新增球友
+        </button>
       </div>
     </>
   );

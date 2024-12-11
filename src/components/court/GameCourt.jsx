@@ -2,12 +2,14 @@ import React, { useState, useEffect, useRef, useMemo } from "react";
 import { useSelector } from "react-redux";
 import GameCourtContext from "../../context/GameCourtContext";
 import { PLAYER_STATUS } from "../../utils/players/constants";
+import DropSection from "../common/DropSection";
+import MoveableItem from "../common/MoveableItem";
+import PlayerCard from "./PlayerCard";
 import Court from "./Court";
 import GameCourtMiddle from "./GameCourtMiddle";
 import IdleCourtAction from "./IdleCourtAction";
 import PlayCourtAction from "./PlayCourtAction";
 import SelectingCourtAction from "./SelectingCourtAction";
-import PlayerCard from "./PlayerCard";
 
 export default function GameCourt({ number }) {
   const { players } = useSelector((state) => state.players);
@@ -31,7 +33,7 @@ export default function GameCourt({ number }) {
           (item.status === PLAYER_STATUS["SELECTING"] ||
             item.status === PLAYER_STATUS["GAME"])
       );
-      if (selectedPlayers.length === 4) {
+      if (selectedPlayers.length > 0) {
         setCourtPlayers(selectedPlayers.sort((a, b) => a.playNo - b.playNo));
       } else {
         setCourtPlayers([]);
@@ -43,14 +45,30 @@ export default function GameCourt({ number }) {
     <GameCourtContext.Provider value={{ number, courtPlayers, intervalRef }}>
       <Court
         middle={<GameCourtMiddle />}
-        players={courtPlayers?.map((player) => (
-          <div
-            key={player?.id}
-            className="d-flex justify-content-center align-items-center h-100"
-          >
-            <PlayerCard player={player} />
-          </div>
-        ))}
+        players={Array.from({ length: 4 }, (_, index) => index).map((index) => {
+          const player = courtPlayers.find((item) => item?.playNo === index);
+          return (
+            <DropSection
+              props={{
+                status: PLAYER_STATUS["SELECTING"],
+                court: number,
+                playNo: index,
+              }}
+              styles={{
+                height: "100%",
+              }}
+              dropable={!player}
+            >
+              <div className="d-flex justify-content-center align-items-center h-100">
+                {player && (
+                  <MoveableItem props={player}>
+                    <PlayerCard player={player} />
+                  </MoveableItem>
+                )}
+              </div>
+            </DropSection>
+          );
+        })}
         footer={
           <div className="mt-3">
             <div className="d-flex justify-content-center gap-2">

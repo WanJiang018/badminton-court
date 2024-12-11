@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { MENU_DEF } from "../utils/common/constants";
 import Arrange from "./Arrange";
 import Player from "./Player";
+import History from "./History";
 import Menu from "../components/common/Menu";
 import BadmintonIcon from "../images/icon-badminton.png";
 
@@ -22,7 +23,7 @@ function App() {
       <div className="container pb-5">
         {tab === MENU_DEF["ARRANGE"] && <Arrange />}
         {tab === MENU_DEF["PLAYER"] && <Player />}
-        {tab === MENU_DEF["HISTORY"] && <>敬請期待!</>}
+        {tab === MENU_DEF["HISTORY"] && <History />}
       </div>
     </>
   );

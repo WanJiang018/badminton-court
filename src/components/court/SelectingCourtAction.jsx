@@ -122,7 +122,11 @@ export default function SelectingCourtAction() {
           <div>隨機排場</div>
         </div>
       </button>
-      <button onClick={handleConfirm} className="btn btn-court rounded-pill">
+      <button
+        onClick={handleConfirm}
+        disabled={courtPlayers?.length < 4}
+        className="btn btn-court rounded-pill"
+      >
         <div className="d-flex align-items-center gap-1">
           <img src={ConfirmIcon} alt="confirm" width="20" height="20" />
           <div>確定排場</div>

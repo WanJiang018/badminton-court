@@ -166,47 +166,54 @@ export default function PlayerRow({ data }) {
         {/* count */}
         {isActiveStatus(status) ? <td>{count ?? 0}</td> : <td>-</td>}
         {/* status */}
-        <td>
-          <span className={`badge rounded-pill status ${status}`}>
-            {status === PLAYER_STATUS["GAME"] && (
-              <div className="d-flex align-items-center gap-1">
-                <img src={WarIcon} alt="game" width="12" height="12" />
-                {court} 號場對戰
-              </div>
-            )}
-            {status === PLAYER_STATUS["SELECTING"] && (
-              <div className="d-flex align-items-center gap-1">
-                <img src={ArrangeIcon} alt="arrange" width="12" height="12" />
-                {court} 號場排場
-              </div>
-            )}
-            {status === PLAYER_STATUS["REST"] && (
-              <div className="d-flex align-items-center gap-1">
-                <img src={CouchIcon} alt="rest" width="12" height="12" />
-                場下休息
-              </div>
-            )}
-            {status === PLAYER_STATUS["TEMP_LEAVE"] && (
-              <div className="d-flex align-items-center gap-1">
-                <img src={LeavePurpleIcon} alt="leave" width="12" height="12" />
-                暫時離開
-              </div>
-            )}
-            {status === PLAYER_STATUS["PREPARE_NEXT"] && (
-              <div className="d-flex align-items-center gap-1">
-                <img src={PrepareIcon} alt="leave" width="12" height="12" />
-                {court} 號場準備
-              </div>
-            )}
-            {status === PLAYER_STATUS["ABSENT"] && (
-              <div className="d-flex align-items-center gap-1">
-                <img src={AbsentIcon} alt="leave" width="12" height="12" />
-                今日未出席
-              </div>
-            )}
-          </span>
-          {time && <span className="text-muted fs-8 ms-md-2">{timer}</span>}
-        </td>
+        {/* <td>
+          <div className="d-flex flex-column align-items-center">
+            <span className={`badge rounded-pill status ${status}`}>
+              {status === PLAYER_STATUS["GAME"] && (
+                <div className="d-flex align-items-center gap-1">
+                  <img src={WarIcon} alt="game" width="12" height="12" />
+                  {court} 號場對戰
+                </div>
+              )}
+              {status === PLAYER_STATUS["SELECTING"] && (
+                <div className="d-flex align-items-center gap-1">
+                  <img src={ArrangeIcon} alt="arrange" width="12" height="12" />
+                  {court} 號場排場
+                </div>
+              )}
+              {status === PLAYER_STATUS["REST"] && (
+                <div className="d-flex align-items-center gap-1">
+                  <img src={CouchIcon} alt="rest" width="12" height="12" />
+                  場下休息
+                </div>
+              )}
+              {status === PLAYER_STATUS["TEMP_LEAVE"] && (
+                <div className="d-flex align-items-center gap-1">
+                  <img
+                    src={LeavePurpleIcon}
+                    alt="leave"
+                    width="12"
+                    height="12"
+                  />
+                  暫時離開
+                </div>
+              )}
+              {status === PLAYER_STATUS["PREPARE_NEXT"] && (
+                <div className="d-flex align-items-center gap-1">
+                  <img src={PrepareIcon} alt="leave" width="12" height="12" />
+                  {court} 號場準備
+                </div>
+              )}
+              {status === PLAYER_STATUS["ABSENT"] && (
+                <div className="d-flex align-items-center gap-1">
+                  <img src={AbsentIcon} alt="leave" width="12" height="12" />
+                  今日未出席
+                </div>
+              )}
+            </span>
+            {time && <span className="text-muted fs-8 ms-md-2">{timer}</span>}
+          </div>
+        </td> */}
         {/* action */}
         {editMode ? (
           <td>

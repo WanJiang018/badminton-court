@@ -58,12 +58,7 @@ export default function PlayerTable() {
           "overflow-x": "scroll",
         }}
       >
-        <table
-          className="table table-striped"
-          style={{
-            minWidth: "450px",
-          }}
-        >
+        <table className="table table-striped">
           <PlayerTableHead columns={PLAYER_TABLE_COLUMNS} onSort={onSort} />
           <tbody>
             {list.map((player) => (
