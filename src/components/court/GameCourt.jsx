@@ -47,12 +47,20 @@ export default function GameCourt({ number }) {
         middle={<GameCourtMiddle />}
         players={Array.from({ length: 4 }, (_, index) => index).map((index) => {
           const player = courtPlayers.find((item) => item?.playNo === index);
+          const isPlaying = courtPlayers.some(
+            (item) => item.status === PLAYER_STATUS["GAME"]
+          );
+
           return (
             <DropSection
+              key={index}
               props={{
-                status: PLAYER_STATUS["SELECTING"],
+                status: isPlaying
+                  ? PLAYER_STATUS["GAME"]
+                  : PLAYER_STATUS["SELECTING"],
                 court: number,
                 playNo: index,
+                ...(isPlaying && { time: courtPlayers[0]?.time }),
               }}
               styles={{
                 height: "100%",
@@ -74,7 +82,7 @@ export default function GameCourt({ number }) {
             <div className="d-flex justify-content-center gap-2">
               {courtPlayers.length === 0 ? (
                 <IdleCourtAction />
-              ) : courtPlayers?.every(
+              ) : courtPlayers?.some(
                   (item) => item.status === PLAYER_STATUS["GAME"]
                 ) ? (
                 <PlayCourtAction />
@@ -86,19 +94,38 @@ export default function GameCourt({ number }) {
               <div className="mt-3 text-white fw-bold ">
                 <span>下一場準備：</span>
                 <div className="d-flex gap-2 fs-2">
-                  {players
-                    .filter(
-                      (item) =>
-                        item.court === number &&
-                        item.status === PLAYER_STATUS["PREPARE_NEXT"]
-                    )
-                    .sort((a, b) => a.playNo - b.playNo)
-                    .map((item, index) => (
-                      <React.Fragment key={item?.id}>
-                        <PlayerCard player={item} size="small" />
-                        {index === 1 && <span className="fs-6">vs</span>}
-                      </React.Fragment>
-                    ))}
+                  {Array.from({ length: 4 }, (_, index) => index).map(
+                    (index) => {
+                      const player = nextPlayers.find(
+                        (item) => item?.playNo === index
+                      );
+                      return (
+                        <React.Fragment key={index}>
+                          <DropSection
+                            props={{
+                              status: PLAYER_STATUS["PREPARE_NEXT"],
+                              court: number,
+                              playNo: index,
+                              time: undefined,
+                            }}
+                            styles={{
+                              ...(!player && {
+                                width: "44px",
+                                height: "25px",
+                                border: "1px dashed #fff",
+                              }),
+                            }}
+                            dropable={!player}
+                          >
+                            <MoveableItem props={player}>
+                              <PlayerCard player={player} size="small" />
+                            </MoveableItem>
+                          </DropSection>
+                          {index === 1 && <span className="fs-6">vs</span>}
+                        </React.Fragment>
+                      );
+                    }
+                  )}
                 </div>
               </div>
             )}

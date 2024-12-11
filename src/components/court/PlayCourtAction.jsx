@@ -125,7 +125,11 @@ export default function PlayCourtAction() {
         </div>
       </button>
       {nextPlayers?.length > 0 && (
-        <button onClick={handleNext} className="btn btn-court rounded-pill">
+        <button
+          onClick={handleNext}
+          disabled={nextPlayers.length < 4}
+          className="btn btn-court rounded-pill"
+        >
           <div className="d-flex align-items-center gap-1">
             <img src={NextIcon} alt="random" width="20" height="20" />
             <div>下一場</div>

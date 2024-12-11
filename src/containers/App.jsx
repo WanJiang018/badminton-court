@@ -20,10 +20,10 @@ function App() {
         <h1>羽球排場小工具</h1>
       </header>
       <Menu tab={tab} onChangeTab={onChangeTab} />
-      <div className="container pb-5">
+      <div className="px-3 px-lg-5 pb-5">
         {tab === MENU_DEF["ARRANGE"] && <Arrange />}
         {tab === MENU_DEF["PLAYER"] && <Player />}
-        {tab === MENU_DEF["HISTORY"] && <History />}
+        {/* {tab === MENU_DEF["HISTORY"] && <History />} */}
       </div>
     </>
   );

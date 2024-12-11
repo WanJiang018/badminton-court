@@ -8,15 +8,15 @@ export default function GameCourtMiddle() {
   const [timer, setTimer] = useState();
 
   useEffect(() => {
-    if (
-      courtPlayers?.length === 4 &&
-      courtPlayers?.every((item) => item.status === PLAYER_STATUS["GAME"])
-    ) {
+    if (courtPlayers?.some((item) => item.status === PLAYER_STATUS["GAME"])) {
       intervalRef.current = setInterval(() => {
         if (courtPlayers[0]?.time) {
           setTimer(formatTimeDifference(courtPlayers[0].time));
         }
       }, 1000);
+    } else {
+      setTimer();
+      clearInterval(intervalRef.current);
     }
     return () => clearInterval(intervalRef.current);
   }, [courtPlayers, intervalRef]);
