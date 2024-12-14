@@ -1,15 +1,32 @@
-import React from "react";
+import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import { PLAYER_STATUS } from "../../utils/players/constants";
 import PlayerCard from "./PlayerCard";
 import DropSection from "../common/DropSection";
 import MoveableItem from "../common/MoveableItem";
+import ArrowUpIcon from "../../images/icon-arrow-up.svg";
+import ArrowDownIcon from "../../images/icon-arrow-down.svg";
 
 export default function PlayerPanel() {
   const { players } = useSelector((state) => state.players);
+  const [expand, setExpand] = useState(true);
 
   return (
-    <div className="fixed-bottom p-2 bg-main-light">
+    <div
+      className="fixed-bottom p-2 bg-main-light"
+      style={{
+        height: expand ? "auto" : "36px",
+      }}
+    >
+      <div className="text-end">
+        <img
+          src={expand ? ArrowDownIcon : ArrowUpIcon}
+          alt="edit"
+          onClick={() => setExpand(!expand)}
+          className="cursor-pointer"
+          width="16"
+        />
+      </div>
       <div className="row">
         <div className="col-sm-8">
           <span className="fs-6 fw-bold">休息區</span>
