@@ -21,6 +21,12 @@ const courtReducer = (state = initialState, action) => {
       storeCourtsData(result);
       return { ...state, courts: result };
     }
+    case CourtActionTypes["UPDATE"]: {
+      const result = state.courts.map((court) =>
+        court === action.payload.oldNumber ? action.payload.newNumber : court
+      );
+      return { ...state, courts: result };
+    }
     case CourtActionTypes["DELETE"]: {
       const result = state.courts.filter(
         (courtNo) => courtNo !== action.payload

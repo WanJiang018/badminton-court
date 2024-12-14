@@ -7,7 +7,7 @@ export const MENU_DEF = {
 export const MENU_ITEMS = [
   { value: MENU_DEF["ARRANGE"], name: "場地安排" },
   { value: MENU_DEF["PLAYER"], name: "球友列表" },
-  { value: MENU_DEF["HISTORY"], name: "歷史對戰" },
+  // { value: MENU_DEF["HISTORY"], name: "歷史對戰" },
 ];
 
 export const LEVEL_DEF = {

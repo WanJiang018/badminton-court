@@ -18,13 +18,6 @@ export default function Player() {
     dispatch({ type: PlayerActionTypes["CREATE"] });
   };
 
-  const handleClean = () => {
-    const userConfirmed = window.confirm("確定要清除嗎?");
-    if (userConfirmed) {
-      dispatch({ type: PlayerActionTypes["CLEAN_ALL_STATUS"] });
-    }
-  };
-
   useEffect(() => {
     dispatch({ type: PlayerActionTypes["GET"] });
   }, [dispatch]);
@@ -40,16 +33,9 @@ export default function Player() {
       <div className="d-flex flex-column gap-4">
         {players.length > 0 && (
           <div className="d-flex flex-column gap-2">
-            <div className="d-flex justify-content-between">
-              <div>
-                <span className="fw-bold">本日出席 </span>
-                <span className="text-muted fs-7">
-                  ({activePlayers.length})
-                </span>
-              </div>
-              <button className="btn btn-create" onClick={handleClean}>
-                清除上場數及狀態
-              </button>
+            <div>
+              <span className="fw-bold">本日出席 </span>
+              <span className="text-muted fs-7">({activePlayers.length})</span>
             </div>
             <PlayerTable />
           </div>

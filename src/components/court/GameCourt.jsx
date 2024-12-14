@@ -80,14 +80,14 @@ export default function GameCourt({ number }) {
         footer={
           <div className="mt-3">
             <div className="d-flex justify-content-center gap-2">
-              {courtPlayers.length === 0 ? (
-                <IdleCourtAction />
-              ) : courtPlayers?.some(
-                  (item) => item.status === PLAYER_STATUS["GAME"]
-                ) ? (
-                <PlayCourtAction />
+              {nextPlayers.length === 0 ? (
+                courtPlayers.length === 0 ? (
+                  <IdleCourtAction />
+                ) : (
+                  <SelectingCourtAction />
+                )
               ) : (
-                <SelectingCourtAction />
+                <PlayCourtAction />
               )}
             </div>
             {nextPlayers.length > 0 && (

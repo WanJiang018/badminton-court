@@ -1,37 +1,25 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { PlayerActionTypes } from "../../redux/actions/playerActions";
 import { PLAYER_STATUS } from "../../utils/players/constants";
-import {
-  convertLevelItem,
-  formatTimeDifference,
-} from "../../utils/common/functions";
+import { convertLevelItem } from "../../utils/common/functions";
 import {
   isActiveStatus,
   isReadOnlyStatus,
 } from "../../utils/players/functions";
 import EditIcon from "../../images/icon-edit.svg";
 import DeleteIcon from "../../images/icon-delete.svg";
-import ArrangeIcon from "../../images/icon-arrange.svg";
-import CouchIcon from "../../images/icon-couch.svg";
-import WarIcon from "../../images/icon-war.svg";
-import LeavePurpleIcon from "../../images/icon-leave-purple.svg";
-import PrepareIcon from "../../images/icon-stopwatch.svg";
-import AbsentIcon from "../../images/icon-xmark.svg";
 
 export default function PlayerRow({ data }) {
   const dispatch = useDispatch();
   const { players } = useSelector((state) => state.players);
-  const { id, name, level, status, count, court, time } = data;
+  const { id, name, level, status } = data;
   const levelItem = convertLevelItem(level);
 
   const [editMode, setEditMode] = useState(name ? false : true);
   const [editName, setEditName] = useState(name);
   const [editLevel, setEditLevel] = useState(level);
   const [invalid, setInvalid] = useState(false);
-
-  const [timer, setTimer] = useState();
-  const intervalRef = useRef();
 
   const handleEdit = () => {
     setEditMode(true);
@@ -94,15 +82,6 @@ export default function PlayerRow({ data }) {
     });
   };
 
-  useEffect(() => {
-    intervalRef.current = setInterval(() => {
-      if (time) {
-        setTimer(formatTimeDifference(time));
-      }
-    }, 1000);
-    return () => clearInterval(intervalRef.current);
-  }, [time]);
-
   return (
     <>
       <tr>
@@ -163,57 +142,6 @@ export default function PlayerRow({ data }) {
             </div>
           )}
         </td>
-        {/* count */}
-        {isActiveStatus(status) ? <td>{count ?? 0}</td> : <td>-</td>}
-        {/* status */}
-        {/* <td>
-          <div className="d-flex flex-column align-items-center">
-            <span className={`badge rounded-pill status ${status}`}>
-              {status === PLAYER_STATUS["GAME"] && (
-                <div className="d-flex align-items-center gap-1">
-                  <img src={WarIcon} alt="game" width="12" height="12" />
-                  {court} 號場對戰
-                </div>
-              )}
-              {status === PLAYER_STATUS["SELECTING"] && (
-                <div className="d-flex align-items-center gap-1">
-                  <img src={ArrangeIcon} alt="arrange" width="12" height="12" />
-                  {court} 號場排場
-                </div>
-              )}
-              {status === PLAYER_STATUS["REST"] && (
-                <div className="d-flex align-items-center gap-1">
-                  <img src={CouchIcon} alt="rest" width="12" height="12" />
-                  場下休息
-                </div>
-              )}
-              {status === PLAYER_STATUS["TEMP_LEAVE"] && (
-                <div className="d-flex align-items-center gap-1">
-                  <img
-                    src={LeavePurpleIcon}
-                    alt="leave"
-                    width="12"
-                    height="12"
-                  />
-                  暫時離開
-                </div>
-              )}
-              {status === PLAYER_STATUS["PREPARE_NEXT"] && (
-                <div className="d-flex align-items-center gap-1">
-                  <img src={PrepareIcon} alt="leave" width="12" height="12" />
-                  {court} 號場準備
-                </div>
-              )}
-              {status === PLAYER_STATUS["ABSENT"] && (
-                <div className="d-flex align-items-center gap-1">
-                  <img src={AbsentIcon} alt="leave" width="12" height="12" />
-                  今日未出席
-                </div>
-              )}
-            </span>
-            {time && <span className="text-muted fs-8 ms-md-2">{timer}</span>}
-          </div>
-        </td> */}
         {/* action */}
         {editMode ? (
           <td>
