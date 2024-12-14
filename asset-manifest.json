@@ -1,22 +1,24 @@
 {
   "files": {
     "main.css": "/badminton-court/static/css/main.9a9d3298.css",
-    "main.js": "/badminton-court/static/js/main.cea7f3f1.js",
+    "main.js": "/badminton-court/static/js/main.2df971ae.js",
     "static/js/453.35ab5d34.chunk.js": "/badminton-court/static/js/453.35ab5d34.chunk.js",
     "static/media/icon-delete.svg": "/badminton-court/static/media/icon-delete.60c9042073cf3b9057b79ba2129c2be4.svg",
     "static/media/icon-edit.svg": "/badminton-court/static/media/icon-edit.3c4ba0adf3c17e550c2858fa0ab96c48.svg",
     "index.html": "/badminton-court/index.html",
+    "static/media/icon-arrow-down.svg": "/badminton-court/static/media/icon-arrow-down.d2dc34b19f87b632a807980aadd08003.svg",
+    "static/media/icon-arrow-up.svg": "/badminton-court/static/media/icon-arrow-up.e44cac309a8cd7846daf4a5ee7f85a72.svg",
     "static/media/icon-sort.svg": "/badminton-court/static/media/icon-sort.8e1b3ea275fad1d9d8db.svg",
     "static/media/icon-sort-asc.svg": "/badminton-court/static/media/icon-sort-asc.30fcf12ac1e100027fbc.svg",
     "static/media/icon-sort-desc.svg": "/badminton-court/static/media/icon-sort-desc.87f68243a6b1d5ab43aa.svg",
     "static/media/icon-next.svg": "/badminton-court/static/media/icon-next.f7628a7e52d4c457599689a45910f4b0.svg",
     "static/media/icon-confirm.svg": "/badminton-court/static/media/icon-confirm.e674f4276e0761d7bb4d587c0e26144b.svg",
     "main.9a9d3298.css.map": "/badminton-court/static/css/main.9a9d3298.css.map",
-    "main.cea7f3f1.js.map": "/badminton-court/static/js/main.cea7f3f1.js.map",
+    "main.2df971ae.js.map": "/badminton-court/static/js/main.2df971ae.js.map",
     "453.35ab5d34.chunk.js.map": "/badminton-court/static/js/453.35ab5d34.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.9a9d3298.css",
-    "static/js/main.cea7f3f1.js"
+    "static/js/main.2df971ae.js"
   ]
 }
