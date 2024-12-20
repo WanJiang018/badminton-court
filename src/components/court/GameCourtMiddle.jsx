@@ -42,6 +42,7 @@ export default function GameCourtMiddle() {
 
   const handleCancel = () => {
     setEditMode(false);
+    setInvalid(false);
     setEditCourt(number);
   };
 
