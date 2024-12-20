@@ -58,7 +58,20 @@ export default function PlayCourtAction() {
     const userConfirmed = window.confirm("確定要進行下一場嗎?");
 
     if (userConfirmed) {
-      finishGame();
+      clearInterval(intervalRef?.current);
+      courtPlayers.forEach((item, _index) => {
+        dispatch({
+          type: PlayerActionTypes["UPDATE"],
+          payload: {
+            ...item,
+            status: PLAYER_STATUS["REST"],
+            time: new Date().getTime(),
+            count: item.count + 1,
+            court: undefined,
+            playNo: undefined,
+          },
+        });
+      });
       nextPlayers?.forEach((item, _index) => {
         dispatch({
           type: PlayerActionTypes["UPDATE"],
@@ -82,6 +95,9 @@ export default function PlayCourtAction() {
             ...item,
             status: PLAYER_STATUS["PREPARE_NEXT"],
             court: number,
+            count: courtPlayers?.map((p) => p.id)?.includes(item.id)
+              ? item.count + 1
+              : item.count,
             playNo: index,
             time: undefined,
           },

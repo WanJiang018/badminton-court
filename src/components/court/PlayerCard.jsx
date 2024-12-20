@@ -31,6 +31,11 @@ export default function PlayerCard({ player, size = "medium" }) {
         className={`${
           player?.status === PLAYER_STATUS["SELECTING"] ? "float" : ""
         }  ${size === "small" ? "small" : ""} ${levelItem} player shadow-sm`}
+        style={{
+          "user-select": "none",
+          "-webkit-user-select": "none",
+          "-moz-user-select": "none",
+        }}
       >
         <div className="position-relative">
           <div>
