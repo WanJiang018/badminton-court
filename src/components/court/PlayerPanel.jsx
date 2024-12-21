@@ -33,7 +33,10 @@ export default function PlayerPanel() {
           <DropSection props={{ status: PLAYER_STATUS["REST"] }}>
             <div className="player-block d-flex flex-wrap gap-2">
               {players
-                .filter((item) => item.status === PLAYER_STATUS["REST"])
+                .filter(
+                  (item) =>
+                    item.name !== "" && item.status === PLAYER_STATUS["REST"]
+                )
                 .sort(
                   (a, b) => a.count - b.count || (a.time || 0) - (b.time || 0)
                 )

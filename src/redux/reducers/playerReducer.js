@@ -23,6 +23,7 @@ const playerReducer = (state = initialState, action) => {
         name: "",
         level: DEFAULT_CREATE_LEVEL,
         status: PLAYER_STATUS["REST"],
+        count: 0,
       };
       const newPlayers = [...state.players, newPlayer];
       storePlayersData(newPlayers);
